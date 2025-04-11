@@ -8,15 +8,11 @@ set AUTO=0
 title Windows 11 Repair/Optimizer - Dutch/NL (Safe for Azure AD devices)
 echo ===================================================================================
 echo -     Windows 11 Repair/Optimizer - Dutch/NL                                      -
-echo -         (Safe for Azure AD devices)                                          -
+echo -         (Safe for Azure AD devices)                                             -
 echo -                                                                                 -
 echo -                                                    Ontwikkeld door ambry/kubaam -
-echo -                                                      Aangepast door Sander Behr -
+echo -                                                     Aangepast door Sander Behr  -
 echo ===================================================================================
-echo.
-echo WAARSCHUWING:
-Echo Dit script wijzigt systeeminstellingen en registersleutels.
-echo Automatisch systeemherstelpunt wordt daarom voor u gemaakt
 echo.
 :: Controleer op beheerdersrechten
 net session >nul 2>&1
@@ -25,27 +21,34 @@ if %errorlevel% neq 0 (
     pause
     exit /b
 )
-    echo [INFO] Herstelpunt maken... Sluit powershell na aanmaken herstelpunt
+    echo [INFO] Herstelpunt maken...
 start powershell -ExecutionPolicy Bypass -NoExit -Command "Checkpoint-Computer -Description 'Windows 11 repair/optimizer' -RestorePointType 'MODIFY_SETTINGS'"
-    timeout /t 20 >nul
 )
+    echo [INFO] Dit script wijzigt systeeminstellingen en registersleutels.
+    echo Daarom wordt er een automatisch Systeemherstelpunt gemaakt voor u. 
+    pause
 
 :MainMenu
 cls
-echo ============================================================
-echo         Windows 11 Tweaks Main Menu
-echo ============================================================
+echo ===================================================================================
+echo -     Windows 11 Repair/Optimizer - Dutch/NL                                      -
+echo -         (Safe for Azure AD devices)                                             -
+echo -                                                                                 -
+echo -                                                    Ontwikkeld door ambry/kubaam -
+echo -                                                      Aangepast door Sander Behr -
+echo ===================================================================================
 echo.
-echo 1. Beschadigde Windows-systeembestanden repareren
-echo 2. Windows update problemen oplossen
-echo 3. Microsoft Store repareren en apps opnieuw registreren
-echo 4. Maximale Prestatie toepassen
-echo 5. Vooraf geinstalleerde windows apps (bloatware) verwijderen
-echo 6. Netwerk problemen oplossen
-echo 7. Herstart Systeem (Advies!)
-echo 8. Exit
+echo            Kies uit het volgende:
+echo		1. Beschadigde Windows-systeembestanden repareren
+echo		2. Windows update problemen oplossen
+echo		3. Microsoft Store repareren en apps opnieuw registreren
+echo		4. Maximale Prestatie toepassen
+echo		5. Vooraf geinstalleerde windows apps (bloatware) verwijderen
+echo		6. Netwerk problemen oplossen
+echo		7. Herstart Systeem (Advies!)
+echo		8. Exit
 echo.
-set /p option="Enter your choice (1-8): "
+set /p option="	Kies (1 t/m 8): "
 
 if "%option%"=="1" goto SFC_DISM
 if "%option%"=="2" goto WindowsUpdateReset
@@ -96,6 +99,7 @@ if "%AUTO%"=="0" (
     call :AskAndRun "Deleting SoftwareDistribution folder" "rd /s /q %systemroot%\SoftwareDistribution >nul 2>&1"
     call :AskAndRun "Deleting catroot2 folder" "rd /s /q %systemroot%\system32\catroot2 >nul 2>&1"
     call :AskAndRun "Restarting Windows Update services" "net start wuauserv >nul 2>&1 && net start cryptSvc >nul 2>&1 && net start bits >nul 2>&1 && net start msiserver >nul 2>&1"
+start terminal set-executionpolicy remotesigned Install-Module PSWindowsUpdate Import-Module PSWindowsUpdate Get-WindowsUpdate install-windowsUpdate -AcceptAll -AutoReboot
 ) else (
     echo [INFO] Stopping Windows Update services...
     net stop wuauserv >nul 2>&1
@@ -234,7 +238,7 @@ goto MainMenu
 :RebootSystem
 cls
 echo ============================================================
-echo             Rebooting System
+echo             Herstart Systeem
 echo ============================================================
 echo Herstart in 5 seconden...
 timeout /t 5 >nul
@@ -243,7 +247,7 @@ goto ExitScript
 
 :ExitScript
 echo.
-echo Script wordt afgesloten. Bedankt voor het gebruik van Windows 11 Ultimate Fix and Tweaks.
+echo Script wordt afgesloten. Bedankt voor het gebruik van Windows 11 Repair/Optimizer
 echo Ontwikkeld door ambry/kubaam, aangepast door Sander Behr
 pause
 exit /b
