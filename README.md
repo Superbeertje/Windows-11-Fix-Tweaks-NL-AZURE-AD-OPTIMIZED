@@ -4,6 +4,8 @@ Below is an updated README adjusted to reflect the improvements and safety measu
 
 # Windows 11 Repair-Optimizer - DutchNL (Safe for Azure AD devices)
 
+Functions:
+1. TBA ..
 ---
 
 ## License
